@@ -1,0 +1,1086 @@
+{
+	"info": {
+		"_postman_id": "a1cf41c4-cba4-4bba-8232-1901035e1b45",
+		"name": "Webhooks",
+		"description": "# 🪝 Get started here\n\nWebhooks are a mechanism that allows services to send real-time notifications to your application regarding asynchronous updates. The collection provides endpoints for setting up and managing webhooks, as well as verifying webhook events.\n\nThis collection demonstrates how to interact with a payment gateway and processing API, focusing specifically on the implementation of webhooks.\n\n### 🔐 Authentication and Authorization\n\nThis template assumes the user making requests to the Webhooks API would be authenticated, for example using a Bearer token. You can choose an authentication method to apply to the whole collection by selecting the collection and navigating to the Authorization tab.\n\n## 🔖 How to use this collection?\n\nThe collection is designed to be flexible and can be customized to meet the specific requirements of your own webhooks API implementation.\n\n#### Step 1: Update the base URL variable\n\nAdd your API's base URL in the `baseUrl` collection variable, replacing the existing dummy endpoint (`https://api.example.com`).\n\n#### Step 2: Create a webhook\n\nStart with `Create Webhook` endpoint to create a webhook and enter the following required information:\n\n- `webhook_url`: the name of the webhook that you're creating\n- `events`: (optional) Events that you want to trigger this webhook with. should be triggered on all events if none was provided.\n    \n\n#### **Step 3: Call the webhook**\n\nProceed to the `Trigger specific webhook` request. This call will utilize the `webhook_id` e.g. `W123456` set in the previous step. Under the **Body** tab, you can optionally update the payload to send.\n\n#### **Step 4: Verify various webhook payloads**\n\nTry sending several payloads to your webhooks with `Verify webhook` endpoint, and monitor your webhook server logs to verify if your webhooks are configured correctly as expected.\n\nYou can see an example of how to configure your webhook to be event-driven. We took Payment Gateway Service as an example here.\n\n#### **Step 5: Continue building the collection**\n\nCreate requests in this collection to test the new API endpoints you develop, and integrate your newly created webhooks in your other services.\n\n## ℹ️ Resources\n\n[Build Webhook with Postman APIs (Video Tutorial)](https://www.youtube.com/watch?v=wdLvXKkXhLk)  \n[Postman's Custom Webhooks](https://learning.postman.com/docs/integrations/webhooks/)  \n[Building requests](https://learning.postman.com/docs/sending-requests/requests/)  \n[Authorizing requests](https://learning.postman.com/docs/sending-requests/authorization/)  \n[Using variables](https://learning.postman.com/docs/sending-requests/variables/)  \n[Creating your first collection](https://learning.postman.com/docs/getting-started/creating-the-first-collection/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "39419356-a1cf41c4-cba4-4bba-8232-1901035e1b45"
+	},
+	"item": [
+		{
+			"name": "Create webhook",
+			"id": "70328062-2da6-4e5e-b8bb-c3402ff02891",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"webhook_url\": \"https://api.example.com/webhooks/listener-for-payment-gateway\",\n  \"events\": [\"payment.created\", \"payment.updated\", \"transaction.created\", \"transaction.updated\", \"refund.created\", \"refund.updated\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/webhooks",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"webhooks"
+					]
+				},
+				"description": "Creates a new webhook to receive real-time notifications for payment, transaction, and refund events.\n\nWhenever any of these events occur, the defined webhook `webhook_url` endpoint e.g. `https://api.example.com/webhooks/listener-for-payment-gateway` will receive a POST request with relevant data.\n\nAlso, you can configure your webhooks to be event-driven by default, as it will only be triggered when one of these system events is fired."
+			},
+			"response": [
+				{
+					"id": "6281be39-8ca0-4e70-8742-76c339677619",
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"webhook_url\": \"https://api.example.com/webhooks/listener-for-payment-gateway\",\n  \"events\": [\"payment.created\", \"payment.updated\", \"transaction.created\", \"transaction.updated\", \"refund.created\", \"refund.updated\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "e1299e84-ac08-4185-9b3c-0b9bece546c1"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"W123456\",\n    \"url\": \"https://api.example.com/webhooks/listener-for-payment-gateway\",\n    \"events\": [\n        \"payment.created\",\n        \"payment.updated\",\n        \"transaction.created\",\n        \"transaction.updated\",\n        \"refund.created\",\n        \"refund.updated\"\n    ],\n    \"created_at\": \"2023-01-01T12:00:00Z\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get webhook by ID",
+			"id": "6ce706b8-58ba-4cf3-a0e0-f893739a1694",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/webhooks/:webhook_id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"webhooks",
+						":webhook_id"
+					],
+					"variable": [
+						{
+							"key": "webhook_id",
+							"value": "W123456",
+							"description": "A specific webhook ID to retrieve"
+						}
+					]
+				},
+				"description": "Retrieves the details of a specific webhook."
+			},
+			"response": [
+				{
+					"id": "e6cb1f8e-ab96-4630-ab47-371d7de26c05",
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id"
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456",
+									"description": "A specific webhook ID to retrieve"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "c5ed2d6b-65f3-4597-96b8-f79ba936aa37"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"id\": \"W123456\",\n  \"url\": \"https://api.example.com/webhooks/listener-for-payment-gateway\",\n  \"events\": [\"payment.created\", \"payment.updated\", \"transaction.created\", \"transaction.updated\", \"refund.created\", \"refund.updated\"],\n  \"created_at\": \"2023-01-01T12:00:00Z\"\n}\n"
+				}
+			]
+		},
+		{
+			"name": "Update webhook",
+			"id": "94795ed5-5f40-4c95-96ee-90bb6cdb131e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"url\": \"https://api.example.com/webhooks/new-listener-for-payment-gateway\",\n  \"events\": [\"payment.created\", \"refund.created\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/webhooks/:webhook_id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"webhooks",
+						":webhook_id"
+					],
+					"variable": [
+						{
+							"key": "webhook_id",
+							"value": "W123456",
+							"description": "A specific webhook ID to retrieve"
+						}
+					]
+				},
+				"description": "Updates the configuration of an existing webhook."
+			},
+			"response": [
+				{
+					"id": "f4780bd3-b719-4074-8021-9844a5a49c49",
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"url\": \"https://api.example.com/webhooks/new-listener-for-payment-gateway\",\n  \"events\": [\"payment.created\", \"refund.created\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id"
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456",
+									"description": "A specific webhook ID to retrieve"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "d8e2cb44-cf45-462a-bdc1-a5e3ca96c43e"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"id\": \"W123456\",\n  \"url\": \"https://api.example.com/webhooks/listener-for-payment-gateway\",\n  \"events\": [\"payment.created\", \"refund.created\"],\n  \"created_at\": \"2023-01-01T12:00:00Z\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete webhook",
+			"id": "4b7e0e25-b6c8-4a27-b62e-c2dffbf78131",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"url\": \"https://example.com/updated-webhook\",\n  \"events\": [\"payment.created\", \"refund.created\"]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/webhooks/:webhook_id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"webhooks",
+						":webhook_id"
+					],
+					"variable": [
+						{
+							"key": "webhook_id",
+							"value": "W123456",
+							"description": "A specific webhook ID to retrieve"
+						}
+					]
+				},
+				"description": "Updates the configuration of an existing webhook."
+			},
+			"response": [
+				{
+					"id": "82578531-8dba-4746-a58c-4f854bcd05b0",
+					"name": "204 No Content",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id"
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456",
+									"description": "A specific webhook ID to retrieve"
+								}
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "7e3ddd6e-fe84-447d-a729-c5a11fc9c9a9"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Trigger specific webhook",
+			"id": "ea048606-6a4a-4993-a750-cd2379fbd25d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/webhooks/:webhook_id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"webhooks",
+						":webhook_id"
+					],
+					"variable": [
+						{
+							"key": "webhook_id",
+							"value": "W123456",
+							"description": "A specific webhook ID to retrieve"
+						}
+					]
+				},
+				"description": "Trigger specific webhook, without listening to a system event.\n\nWhile triggering webhooks without relying on system events provides flexibility and control, it's important to ensure that appropriate security measures are in place to protect the webhook endpoint and validate incoming requests."
+			},
+			"response": [
+				{
+					"id": "950c6dc5-1baf-4943-a014-138f43c58885",
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id"
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456",
+									"description": "A specific webhook ID to retrieve"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "b98e74d1-41d7-4c32-8de7-5a1ba9a69a85"
+						}
+					],
+					"cookie": [],
+					"body": "OK"
+				}
+			]
+		},
+		{
+			"name": "Verify webhook",
+			"id": "ae415b32-f536-46a0-8e9c-588c2b857dc3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"event\": \"payment.created\",\n    \"payment_id\": \"P123456\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"customer_id\": \"C987654\",\n    \"status\": \"pending\",\n    \"created_at\": \"2023-05-20T10:30:00Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/webhooks/:webhook_id/verify?event=payment.created",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"webhooks",
+						":webhook_id",
+						"verify"
+					],
+					"query": [
+						{
+							"key": "event",
+							"value": "payment.created",
+							"description": "Example event e.g. payment.created, payment.updated, transaction.created, transaction.updated, refund.created, refund.updated."
+						}
+					],
+					"variable": [
+						{
+							"key": "webhook_id",
+							"value": "W123456",
+							"description": "A specific webhook ID to verify/test"
+						}
+					]
+				},
+				"description": "Verifies the webhook by sending a test payload with the specified event. Here we're using Payment Gateway API service for an example."
+			},
+			"response": [
+				{
+					"id": "724ef5f1-9d81-46f8-8152-675a3fbdd0dc",
+					"name": "Payment created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"event\": \"payment.created\",\n    \"payment_id\": \"P123456\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"customer_id\": \"C987654\",\n    \"status\": \"pending\",\n    \"created_at\": \"2023-05-20T10:30:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id/verify?event=payment.created",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "event",
+									"value": "payment.created",
+									"description": "Example event e.g. payment.created, payment.updated, transaction.created, transaction.updated, refund.created, refund.updated."
+								}
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456",
+									"description": "A specific webhook ID to verify/test"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "f5f97dff-7d55-4815-9d7f-8b15671b3ece"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"event\": \"payment.created\",\n    \"payment_id\": \"P123456\",\n    \"amount\": 100,\n    \"currency\": \"USD\",\n    \"customer_id\": \"C987654\",\n    \"status\": \"pending\",\n    \"created_at\": \"2023-05-20T10:30:00Z\"\n}"
+				},
+				{
+					"id": "a73c6159-a08d-4f7c-81ff-fed5b65bd9c4",
+					"name": "Payment updated",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"event\": \"payment.updated\",\n  \"payment_id\": \"P123456\",\n  \"status\": \"completed\",\n  \"updated_at\": \"2023-05-20T11:15:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id/verify?event=payment.updated",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "event",
+									"value": "payment.updated"
+								}
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "794e5ed5-c0c7-4d79-93de-d09c55378793"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"event\": \"payment.updated\",\n  \"payment_id\": \"P123456\",\n  \"status\": \"completed\",\n  \"updated_at\": \"2023-05-20T11:15:00Z\"\n}"
+				},
+				{
+					"id": "382894a1-8038-46d4-8770-5ee1c6ed9e99",
+					"name": "Transaction created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"event\": \"transaction.created\",\n  \"transaction_id\": \"T987654\",\n  \"amount\": 100.0,\n  \"currency\": \"USD\",\n  \"order_id\": \"O123456\",\n  \"status\": \"completed\",\n  \"created_at\": \"2023-05-20T12:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id/verify?event=transaction.created",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "event",
+									"value": "transaction.created"
+								}
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "9f8d3db0-b3ed-4768-8706-0731d9ed5b91"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"event\": \"transaction.created\",\n  \"transaction_id\": \"T987654\",\n  \"amount\": 100.0,\n  \"currency\": \"USD\",\n  \"order_id\": \"O123456\",\n  \"status\": \"completed\",\n  \"created_at\": \"2023-05-20T12:00:00Z\"\n}\n"
+				},
+				{
+					"id": "064f09aa-c016-42ab-a271-e3819d037196",
+					"name": "Transaction updated",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"event\": \"transaction.updated\",\n  \"transaction_id\": \"T987654\",\n  \"status\": \"cancelled\",\n  \"updated_at\": \"2023-05-20T12:30:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id/verify?event=transaction.updated",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "event",
+									"value": "transaction.updated"
+								}
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "2f984cc2-5961-4b67-8011-19ac39a311de"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"event\": \"transaction.updated\",\n  \"transaction_id\": \"T987654\",\n  \"status\": \"cancelled\",\n  \"updated_at\": \"2023-05-20T12:30:00Z\"\n}"
+				},
+				{
+					"id": "d19c379a-7de9-4b39-8d4d-7e93080111ad",
+					"name": "Refund created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"event\": \"refund.created\",\n  \"refund_id\": \"R987654\",\n  \"amount\": 50.0,\n  \"currency\": \"USD\",\n  \"transaction_id\": \"T123456\",\n  \"status\": \"pending\",\n  \"created_at\": \"2023-05-20T13:15:00Z\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id/verify?event=refund.created",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "event",
+									"value": "refund.created"
+								}
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "22616079-da07-479e-9492-b846a0d09a27"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"event\": \"refund.created\",\n  \"refund_id\": \"R987654\",\n  \"amount\": 50.0,\n  \"currency\": \"USD\",\n  \"transaction_id\": \"T123456\",\n  \"status\": \"pending\",\n  \"created_at\": \"2023-05-20T13:15:00Z\"\n}\n"
+				},
+				{
+					"id": "8598d65b-9991-4c34-bc38-b7f8c6c2381e",
+					"name": "Refund updated",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"event\": \"refund.updated\",\n  \"refund_id\": \"R987654\",\n  \"status\": \"completed\",\n  \"updated_at\": \"2023-05-20T14:00:00Z\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id/verify?event=refund.updated",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "event",
+									"value": "refund.updated"
+								}
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": "W123456"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "75a2f446-df4f-455d-bb72-190046c8b3c1"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"event\": \"refund.updated\",\n  \"refund_id\": \"R987654\",\n  \"status\": \"completed\",\n  \"updated_at\": \"2023-05-20T14:00:00Z\"\n}\n"
+				}
+			]
+		},
+		{
+			"name": "List webhooks",
+			"id": "c76192f1-7494-44a5-8299-0b81a3fd0655",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/webhooks",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"webhooks"
+					]
+				},
+				"description": "Fetch all webhook subscriptions."
+			},
+			"response": [
+				{
+					"id": "138e5a0b-8b33-4b19-ad11-850d8690d0b3",
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/webhooks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"webhooks"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "e29e29ba-4427-4573-b757-275b883eb071"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"webhooks\": [\n        {\n            \"id\": \"webhook-1\",\n            \"url\": \"https://example.com/webhook\",\n            \"events\": [\n                \"payment.created\",\n                \"payment.updated\"\n            ],\n            \"secret\": \"my_webhook_secret\",\n            \"livemode\": true,\n            \"status\": \"active\",\n            \"description\": \"Webhook for order processing\"\n        },\n        {\n            \"id\": \"webhook-2\",\n            \"url\": \"https://example.com/another-webhook\",\n            \"events\": [\n                \"payment.created\"\n            ],\n            \"secret\": \"another_webhook_secret\",\n            \"livemode\": true,\n            \"status\": \"inactive\",\n            \"description\": \"Another webhook\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Check webhook status",
+			"id": "735b1636-0b77-43aa-b173-fab11cb35984",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/webhooks/:webhook_id/status",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"webhooks",
+						":webhook_id",
+						"status"
+					],
+					"variable": [
+						{
+							"key": "webhook_id",
+							"value": null,
+							"description": "ID of the webhook"
+						}
+					]
+				},
+				"description": "Check the status of a specific webhook subscription."
+			},
+			"response": [
+				{
+					"id": "e033c8b9-7ed7-4ed9-9852-ecc6f99f240a",
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": null,
+									"description": "ID of the webhook"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "6f6cd631-bc05-49a6-80eb-ac3fa45f4a41"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"webhook-1\",\n    \"status\": \"active\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get webhook stats",
+			"id": "33e5d64d-8ed0-4270-a708-ec137687de30",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/webhooks/:webhook_id/stats",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"webhooks",
+						":webhook_id",
+						"stats"
+					],
+					"variable": [
+						{
+							"key": "webhook_id",
+							"value": null,
+							"description": "ID of the webhook"
+						}
+					]
+				},
+				"description": "Retrieve statistics for the events that triggered the webhook."
+			},
+			"response": [
+				{
+					"id": "70c2e07f-0985-4c3f-bf19-8a1e2f556ff3",
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/:webhook_id/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"webhooks",
+								":webhook_id",
+								"stats"
+							],
+							"variable": [
+								{
+									"key": "webhook_id",
+									"value": null,
+									"description": "ID of the webhook"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text",
+							"uuid": "dd49805f-6227-441f-8658-e76d47e66e6d"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"webhookId\": \"webhook-1\",\n  \"totalEvents\": 100,\n  \"eventDistribution\": {\n    \"payment.created\": 70,\n    \"payment.updated\": 20,\n    \"payment.failed\": 10\n  },\n  \"lastEventTime\": \"2023-05-18T10:00:00Z\"\n}\n"
+				}
+			]
+		},
+		{
+			"name": "https://kapela-team.postman.co/workspace/3d80e087-f3c0-416d-a90a-30a83af4addd/request/39419356-fd88693c-b0b9-4503-8e1c-eece3e11a22c?action=share&source=copy-link&creator=39419356",
+			"id": "43c18b42-377b-42f7-b48c-02a513553fca",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://kapela-team.postman.co/workspace/3d80e087-f3c0-416d-a90a-30a83af4addd/request/39419356-fd88693c-b0b9-4503-8e1c-eece3e11a22c?action=share&source=copy-link&creator=39419356",
+					"protocol": "https",
+					"host": [
+						"kapela-team",
+						"postman",
+						"co"
+					],
+					"path": [
+						"workspace",
+						"3d80e087-f3c0-416d-a90a-30a83af4addd",
+						"request",
+						"39419356-fd88693c-b0b9-4503-8e1c-eece3e11a22c"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "share"
+						},
+						{
+							"key": "source",
+							"value": "copy-link"
+						},
+						{
+							"key": "creator",
+							"value": "39419356"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				],
+				"id": "d306a55b-3471-4376-943c-5ad188a6d2d1"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				],
+				"id": "801dffc1-ee25-4d4d-9b2c-c47a0079d79d"
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "9265057f-1cb3-437b-88ab-9883589ed3fa",
+			"key": "baseUrl",
+			"value": "https://fcde83ce-ae2a-4165-bf7f-c2bb5f7fe762.mock.pstmn.io",
+			"type": "string"
+		},
+		{
+			"id": "828e49d9-8998-4bff-9eab-2ab897f74bb2",
+			"key": "authToken",
+			"value": "dummy_token",
+			"type": "string"
+		}
+	]
+}
